@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchWeather } from '../actions/index';
 
 
 class Searchbar extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -9,7 +12,7 @@ class Searchbar extends Component { // eslint-disable-line react/prefer-stateles
     this.onInputChange = this.onInputChange.bind(this);
     //binding context so that onInputChange's this keyword refers to componets
     //this keyword
-
+    this.onFormSubmit = this.onFormSubmit.bind(this);
 
   }
 
@@ -19,8 +22,13 @@ onInputChange(event) {
 }
 
 onFormSubmit(event) {
+
   event.preventDefault();
-  //at this point we need to fetch weather data 
+
+
+  //at this point we need to fetch weather data
+  this.props.fetchWeather(this.state.term);
+  this.setState({ term: ''})
 }
   render() {
     return (
@@ -39,6 +47,8 @@ onFormSubmit(event) {
   }
 }
 
+function mapDispacthToProps(dispatch) {
+  return bindActionCreators({ fetchWeather }, dispatch);
+}
 
-
-export default Searchbar;
+export default connect(null, mapDispacthToProps)(Searchbar);
